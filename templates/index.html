@@ -1,0 +1,306 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome ! </title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/foundation.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/app.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/animate.css') }}">
+    <!-- font awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
+    <!-- fonts  -->
+    <link href="https://fonts.googleapis.com/css?family=Dosis|Montserrat|Roboto+Mono|Ubuntu" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato|Open+Sans+Condensed:300|PT+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Anton|Josefin+Sans|Quicksand" rel="stylesheet">
+   
+      
+      
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+    var sb,pass,warn;
+    $(document).ready(function(){
+        $("#AE").slideDown();
+        
+        
+        warn = document.getElementById("warn")
+        pass = document.getElementById("passW");
+        sb = document.getElementById("prog");
+        pass.addEventListener("keyup", function() {
+          checkpassword(pass.value);
+        });
+
+        $("#passW").focus(function(){
+            $("#message").slideDown();
+        });
+    });
+    function validateForm() {
+            var fn = document.forms["signUpForm"]["fn"].value;
+            var em = document.forms["signUpForm"]["em"].value;
+            var pass1 = document.forms["signUpForm"]["pass1"].value;
+            var pass2 = document.forms["signUpForm"]["pass2"].value;
+            if (fn == "" || em == "" || pass1 == "" || pass2 == "") {
+                ErrorMsg.innerHTML = "All fields must be filled out";
+                $("#ErrorMsg").slideDown();
+                return false;
+            }
+            else {
+                if (pass1 != pass2){
+                    ErrorMsg.innerHTML = "passwords don't match";
+                    $("#ErrorMsg").slideDown();
+                    return false;
+                }
+                if (!em.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
+                    ErrorMsg.innerHTML = "please provide a valid Email";
+                    $("#ErrorMsg").slideDown();
+                    return false;
+                }
+                if (pass1.length < 6){
+                    ErrorMsg.innerHTML = "Password should not be less than 6 characters";
+                    $("#ErrorMsg").slideDown();
+                    return false;
+                }
+            }
+            return true;
+          }
+            
+        
+
+    function checkpassword(password) {
+        var strength = 0;
+        if (password.match(/[a-z]+/)) {
+            strength += 1;
+        }
+        if (password.match(/[A-Z]+/)) {
+            strength += 1;
+        }
+        if (password.match(/[0-9]+/)) {
+            strength += 1;
+        }
+        if (password.match(/[$@#&!"'-_éàè/*+²]+/)) {
+            strength += 1;
+        }
+
+        if (password.length < 6) {
+            warn.innerHTML = "minimum number of characters is 6";
+        }
+        else{
+            warn.innerHTML  = "";
+        }
+      switch (strength) {
+        case 0:
+            sb.value = 0;
+        break;
+
+        case 1:
+            sb.value = 25;
+        break;
+
+        case 2:
+            sb.value = 50;
+        break;
+
+        case 3:
+            sb.value = 75;
+        break;
+
+        case 4:
+            sb.value = 100;
+        break;
+      }
+        
+    }
+        
+        
+    </script>
+
+  </head>
+  <body>
+
+      <div class="title-bar toglebtn">
+        <div class="title-bar-left">
+          <button class="menu-icon" type="button" data-open="offCanvas"></button>
+          <span class="title-bar-title"> Near By shops</span>
+        </div>
+      </div>
+
+
+      <div class="off-canvas position-left" id="offCanvas" data-off-canvas>
+    <!-- Your menu or Off-canvas content goes here -->
+        <button class="close-button" aria-label="Close menu" type="button" data-close>
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <br>
+        <ul class="vertical menu">
+            <li><a class="imin" href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="#">About us</a></li>
+        </ul>
+      </div>
+
+
+  <div class="off-canvas-content" data-off-canvas-content>
+    <!-- Your page content lives here -->
+  
+
+
+        <!-- The Nav bar -->
+    <nav class="top-bar top-bar-desq">
+      <div class="wrap">
+        <div class="top-bar-left">
+          <ul class="menu mymenu ">
+            <li><a class="imin" href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="#">About us</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div id="AE">
+                                {{ messages[0] }}.
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+
+        <!-- header -->
+    <div class="header">
+        <div class="grid-x grid-padding-x grid-margin-x">
+            <div class="cell large-6 wrapper">
+                <form name="signUpForm" class="log-in-form" action="{{url_for('SignedUp')}}" onsubmit=" return validateForm()" method="POST"  >
+                    <h4 class="signTxt">Sign up if you haven't done so already!</h4>
+                    <p id="ErrorMsg"></p>                    
+                      <label>Full name:
+                        <input type="text" placeholder="Full name" name="fn">
+                      </label>
+                      <label>Email:
+                        <input type="email" placeholder="somebody@example.com" name="em">
+                      </label>
+                      <label>Password
+                        <input id="passW" type="password" placeholder="Password" name="pass1">
+                          <span id="warn"></span>
+                      </label>
+                      <label>Confirm Password
+                        <input type="password" placeholder="Password Again" name="pass2">
+                      </label>
+    
+                        <div id="message">
+                          <progress max="100" value="0" id="prog"></progress>
+                          <p> A good password should contain:</p>
+                          <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+                          <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+                          <p id="number" class="invalid">A <b>number</b></p>
+                          <p id="length" class="invalid">Minimum <b>6 characters</b></p>
+                        </div>
+
+                      <p><input type="submit" class="button expanded Subbut" value="Log in"/></p>
+                </form>
+            </div>
+            
+            <div class="cell large-3 large-offset-1">
+                <div class="SignIn">
+                <form class="log-in-form" action="{{url_for('login')}}" method="POST"  >
+                    <h4 class="signTxt">Sign in</h4>
+                      <label>Email:
+                        <input name="em" type="email" placeholder="somebody@example.com">
+                      </label>
+                      <label>Password
+                        <input name="pass" type="password" placeholder="Password">
+                      </label>
+                      <input id="show-password" type="checkbox"><label for="show-password">Show password</label>
+
+                      <p><input type="submit" class="button expanded Subbut" value="Log in"/></p>
+                      <p class="text-center"><a href="#">Forgot your password?</a></p>
+                </form>
+                </div>
+            </div>
+        
+        </div>
+      </div>
+
+      
+      
+      
+     
+    <!--last content-->
+
+    <div class="backfilter"></div>
+      <div class="content3">
+      <div class="wrap">
+        <h1>They said about us:</h1>
+        <div class="grid-x large-up-3 medium-up-1 small-up-1 feedback-container">
+          <div class="cell">
+            <img src="{{url_for('static', filename='images/face1.jpg')}}">
+            <p>
+              <span><b>Etwanda<br></b></span>
+              This is a very good website to find near by shops !! 
+            </p>
+          </div>
+
+          <div class="cell">
+            <img src="{{url_for('static', filename='images/face2.jpg')}}">
+            <p>
+              <span><b>Salim<br></b></span>
+                Very useful !! I use it Everyday, thank you team.
+            </p>
+          </div>
+
+          <div class="cell">
+            <img src="{{url_for('static', filename='images/face3.jpg')}}">
+            <p>
+              <span><b>Ana<br></b></span>
+              This website helps me to find shops whenever I go , i really like it. 
+            </p>
+          </div>
+        </div>
+        <br>
+        
+      </div>
+      <span class="fb">Tell us about your experience: <a href="#">Contact</a></span>
+    </div>
+
+        <!-- footer -->
+
+      <div class="footer">
+        <div class="grid-x grid-padding-x small-up-1 medium-up-2 large-up-3 wrap">
+
+          <div class="cell">
+            <h4>Site map</h4>
+            <hr>
+            <ul class="vertical menu">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About us</a></li>
+            </ul>          
+          </div>
+
+          <div class="cell">
+            <h4>Find us:</h4>
+            <hr>
+            <ul class="vertical menu media">
+              <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+              <li><a href="#"><i class="fab fa-youtube"></i> Youtube</a></li>
+              <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="name" >
+        <div class="wrap">
+          <p >Made with <i class="fas fa-heart"></i> For Remote United Coding Challenge</p>
+        </div>
+      </div>
+
+
+      <script src="{{url_for('static', filename='js/vendor/jquery.js')}}"></script>
+      <script src="{{url_for('static', filename='js/vendor/what-input.js')}}"></script>
+      <script src="{{url_for('static', filename='js/vendor/foundation.js')}}"></script>
+      <script src="{{url_for('static', filename='js/app.js')}}"></script>
+      <script src="{{url_for('static', filename='js/wow.js')}}"></script>
+      <script>
+        new WOW().init();
+      </script>
+    </div>
+  </body>
+</html>

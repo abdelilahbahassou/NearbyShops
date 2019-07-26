@@ -1,0 +1,158 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearby shops</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/foundation.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/app.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/animate.css') }}">
+    <!-- font awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
+    <!-- fonts  -->
+    <link href="https://fonts.googleapis.com/css?family=Dosis|Montserrat|Roboto+Mono|Ubuntu" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato|Open+Sans+Condensed:300|PT+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Anton|Josefin+Sans|Quicksand" rel="stylesheet">
+  </head>
+  <body>
+
+      <div class="title-bar toglebtn">
+        <div class="title-bar-left">
+          <button class="menu-icon" type="button" data-open="offCanvas"></button>
+          <span class="title-bar-title"> Near By shops</span>
+        </div>
+      </div>
+
+
+      <div class="off-canvas position-left" id="offCanvas" data-off-canvas>
+    <!-- Your menu or Off-canvas content goes here -->
+        <button class="close-button" aria-label="Close menu" type="button" data-close>
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <br>
+        <ul class="vertical menu">
+              <li><a class="imin" href="{{ url_for('shops') }}">Home</a></li>
+              <li><a href="{{ url_for('likedShops') }}">Liked shops</a></li>
+               <li><a href="{{ url_for('logout') }}">logout</a></li>
+        </ul>
+      </div>
+
+
+
+    <div class="off-canvas-content" data-off-canvas-content>
+      <!-- The page content lives here -->
+      <!-- The Nav bar -->
+      <nav class="top-bar top-bar-desq">
+        <span class="welcomeMsg">Welcome {{user}}</span>
+        <div class="wrap">
+          <div class="top-bar-left">
+            <ul class="menu mymenu align-right">
+              <li><a class="imin" href="{{ url_for('shops') }}">Home</a></li>
+              <li><a href="{{ url_for('likedShops') }}">Liked shops</a></li>
+               <li><a href="{{ url_for('logout') }}">logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+
+     
+      
+        <!-- Content -->
+      <div class="content1">
+        <div class="wrap">
+          <h1>Nearby Shops ...</h1>
+          
+          {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div id="AE">
+                                {{ messages[0] }}.
+                            </div>
+                        {% endif %}
+          {% endwith %}
+          
+          
+          <form  method="POST" action="{{ url_for('shops') }}">
+            <select class="sortBy" name="sortBy" >  
+              <option  value="new">Sort by new</option>
+              <option {{selected}} value="distance">Sort by Distance</option>
+            </select>
+            <button type="submit" class="SortByBtn">Go</button>
+          </form>
+          
+          <div class="grid-x grid-padding-x grid-margin-x large-up-3 medium-up-1 small-up-1 ">
+
+            {% for item in shops %}
+            <div class="cell wow fadeIn">
+              <a href="#">
+                <div class="img-container1">
+                  <button>See more...</button>
+                  <img src="{{url_for('static', filename='images/'+item.ShopImage)}}">
+                </div>
+              </a>
+              <form name='likeF' method='POST' action ='{{url_for("liked_disliked")}}'>
+                <h4>{{item.ShopName}}</h4>
+                <p>
+                  Shop Description : {{item.ShopDesc}} <br>
+                  distance: {{item.ShopDistance}} Km <br>
+                  <input type="hidden" name="ShopName" value="{{ item.ShopName }}">
+                  <input name="action" type="submit"  class="success button like" value="Like" >
+                  <input name="action" type="submit"  class="alert button like" value="disLike">
+                </p>
+              </form>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <script>
+          function reply_click(clicked_id){
+          alert(clicked_id);
+          }
+        </script>
+      </div>
+
+        <!-- footer -->
+
+      <div class="footer">
+        <div class="grid-x grid-padding-x small-up-1 medium-up-2 large-up-3 wrap">
+
+          <div class="cell">
+            <h4>Site map</h4>
+            <hr>
+            <ul class="vertical menu">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About us</a></li>
+            </ul>          
+          </div>
+
+          <div class="cell">
+            <h4>Find us:</h4>
+            <hr>
+            <ul class="vertical menu media">
+              <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+              <li><a href="#"><i class="fab fa-youtube"></i> Youtube</a></li>
+              <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="name" >
+        <div class="wrap">
+          <p >Made with <i class="fas fa-heart"></i> For Remote United Coding Challenge</p>
+        </div>
+      </div>
+      
+
+      <script src="{{url_for('static', filename='js/vendor/jquery.js')}}"></script>
+      <script src="{{url_for('static', filename='js/vendor/what-input.js')}}"></script>
+      <script src="{{url_for('static', filename='js/vendor/foundation.js')}}"></script>
+      <script src="{{url_for('static', filename='js/app.js')}}"></script>
+      <script src="{{url_for('static', filename='js/wow.js')}}"></script>
+      <script>
+        new WOW().init();
+      </script>
+    </div>
+  </body>
+</html>
