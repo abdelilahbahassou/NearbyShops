@@ -44,7 +44,6 @@ def login():
     password = request.form.get('pass')
 
     user = User.query.filter_by(email=email).first()
-    print(user)
     # check if user exists, and check his credentials 
     if not user or not check_password_hash(user.password, password): 
         flash('Please check your login details and try again.')
